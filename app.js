@@ -18,6 +18,16 @@ app.listen(PROJECT_PORT, () => {
   console.log(`サーバーがポート${PROJECT_PORT}で起動しました。`);
 });
 
+// view engineにejsを登録
+app.set('view engine', 'ejs');
+
+// 表示画面のルーティング
+app.get('/', function(req, res, next) {
+  // renderメソッドで任意のテンプレートを表示させる
+  res.render("index", {});
+})
+
+// data
 var photoList = [
   {
       id: "001",
@@ -50,4 +60,16 @@ app.get("/api/photo/list", function(req, res, next){
   res.json(photoList);
 });
 
+// 特定のIDの写真情報を表示
+app.get("/api/photo/:photoId", function(req, res, next){
+  console.log('req', req)
+  var photo;
+  for (var i = 0; i < photoList.length; i++){
+      console.log('index', i)
+      if (photoList[i].id == req.params.photoId){
+          var photo = photoList[i];
+      }
+  }
+  res.json(photo);
+});
 
