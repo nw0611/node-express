@@ -9,11 +9,31 @@ const client = new Client({
   port: 5432,
 });
 client.connect();
-const result = await client.query("SELECT NOW()").then((res) => {
+
+// 追加
+// client.query({
+//   text: "INSERT INTO member VALUES ($1, $2)",
+//   values: ['4', "山田四郎"],
+// }).then((res) => {
+//   console.log('add client res', res)
+// })
+
+// 削除
+// client.query({
+//   text: "DELETE FROM member WHERE id = $1",
+//   values: [4],
+// }).then((res) => {
+//   console.log('add client res', res)
+// }).catch((e) => {
+//   console.error('error', e)
+// })
+
+// 取得
+const result = await client.query("SELECT * FROM member").then((res) => {
   console.log('then', res)
-  return res
+  return res.rows;
 });
 console.log('result', result)
-client.end();
+client.end()
 
 export default result
