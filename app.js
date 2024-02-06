@@ -1,67 +1,84 @@
 import express from 'express';
 import pg from 'pg';
-const { Pool } = pg
+
+import createError from 'http-errors';
+import { fileURLToPath } from 'url';
+import path from 'path';
+import cookieParser from 'cookie-parser';
+import logger from 'morgan';
+
+import indexRouter from './routes/index.js';
+import usersRouter from './routes/users.js';
 
 const app = express();
 const PROJECT_PORT = 3000;
 
-// PostgreSQL接続情報を設定
-const pool = new Pool({
-  user: 'your_username',
-  host: 'your_host',
-  database: 'your_database',
-  password: 'your_password',
-  port: 5432 // ポート番号はデフォルトの5432に設定
-});
+// ESモジュールで __dirname をエミュレートし、ファイルの絶対パスを変数化
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+console.log('__filename', __filename)
+console.log('__dirname', __dirname)
 
-app.listen(PROJECT_PORT, () => {
-  console.log(`サーバーがポート${PROJECT_PORT}で起動しました。`);
-});
-
-// view engineにejsを登録
+/*
+* view engineにejsを登録
+*/ 
+// viewsのルートを指定
+app.set('views', path.join(__dirname, 'views'));
 app.set('view engine', 'ejs');
 
-// 表示画面のルーティング
-app.get('/', function(req, res, next) {
-  // renderメソッドで任意のテンプレートを表示させる
-  res.render("index", {});
-})
+app.use(logger('dev'));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, 'public')));
 
-// data
-var photoList = [
+/*
+* route
+*/
+app.use('/', indexRouter);
+app.use('/users', usersRouter);
+
+// catch 404 and forward to error handler
+app.use((req, res, next) => {
+  next(createError(404));
+});
+
+// error handler
+app.use((err, req, res, next) => {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+// 仮data
+const photoList = [
   {
-      id: "001",
-      name: "photo001.jpg",
-      type: "jpg",
-      dataUrl: "https://picsum.photos/300/200"
+    id: "001",
+    name: "photo001.jpg",
+    type: "jpg",
+    dataUrl: "https://picsum.photos/300/200"
   },{
-      id: "002",
-      name: "photo002.jpg",
-      type: "jpg",
-      dataUrl: "https://picsum.photos/300/200"
+    id: "002",
+    name: "photo002.jpg",
+    type: "jpg",
+    dataUrl: "https://picsum.photos/300/200"
   }
 ]
 
-// データベースからデータを取得する例
-app.get('/api/users', async (req, res) => {
-  try {
-    const client = await pool.connect();
-    const result = await client.query('SELECT * FROM users');
-    res.json(result.rows);
-    client.release();
-  } catch (err) {
-    console.error('Error executing query', err);
-    res.status(500).json({ error: 'Database error' });
-  }
-});
-
+/*
+* API
+*/
 // 写真リストを取得するAPI
-app.get("/api/photo/list", function(req, res, next){
+app.get("/api/photo/list", (req, res, next) => {
   res.json(photoList);
 });
 
 // 特定のIDの写真情報を表示
-app.get("/api/photo/:photoId", function(req, res, next){
+app.get("/api/photo/:photoId", (req, res, next) => {
   console.log('req', req)
   var photo;
   for (var i = 0; i < photoList.length; i++){
@@ -73,3 +90,8 @@ app.get("/api/photo/:photoId", function(req, res, next){
   res.json(photo);
 });
 
+app.listen(PROJECT_PORT, () => {
+  console.log(`サーバーがポート${PROJECT_PORT}で起動しました。`);
+});
+
+export default app;

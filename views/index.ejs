@@ -1,32 +1,36 @@
+<!DOCTYPE html>
 <html>
+	<head>
+		<title><%= title %></title>
+		<link rel='stylesheet' href='/stylesheets/style.css' />
+	</head>
 <body>
-    <h1>New Project</h1>
-    <ul id="photoList">
-    </ul>
-    <script>
-        const xhr = new XMLHttpRequest();
-        let response;
-        xhr.open('GET', '/api/photo/list');
-        xhr.addEventListener('load', function(e) {
-            const list = JSON.parse(xhr.responseText);
-            response = list
-            console.log('response', response)
+	<!-- routes/index で変数の値を渡している -->
+	<h1><%= title %></h1>
+	<p>Welcome to <%= title %> !!!</p>
+	<ul id="photoList">
+	</ul>
+	<script>
+		// const xhr = new XMLHttpRequest();
+		// xhr.open('GET', '/api/photo/list');
+		// xhr.addEventListener('load', function(e) {
+		// 	const response = JSON.parse(xhr.responseText);
+		// 	console.log('response', response)
 
-            const ul = document.getElementById('photoList');
-
-            for(let i = 0; i < response.length; i++) {
-                // dom作成
-                let li = document.createElement('li')
-                let img = document.createElement('img')
-                // 属性付与
-                img.setAttribute('src', response[i].dataUrl)
-                console.log('atag', img)
-                // dom追加
-                li.appendChild(img);
-                ul.appendChild(li);
-            }
-        });
-        xhr.send();
-    </script>
+		// 	const ul = document.getElementById('photoList');
+		// 	for(let i = 0; i < response.length; i++) {
+		// 		// dom作成
+		// 		let li = document.createElement('li')
+		// 		let img = document.createElement('img')
+		// 		// 属性付与
+		// 		img.setAttribute('src', response[i].dataUrl)
+		// 		console.log('atag', img)
+		// 		// dom追加
+		// 		li.appendChild(img);
+		// 		ul.appendChild(li);
+		// 	}
+		// });
+		// xhr.send();
+	</script>
 </body>
 </html>
