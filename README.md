@@ -1,2 +1,3 @@
 # node-express
-backendをexpressで作成
+backend APIをexpressでたてる
+UI側をejsを使用する
