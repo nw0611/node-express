@@ -11,7 +11,7 @@ import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 
 const app = express();
-const PROJECT_PORT = 3000;
+// const PROJECT_PORT = 3000;
 
 // ESモジュールで __dirname をエミュレートし、ファイルの絶対パスを変数化
 const __filename = fileURLToPath(import.meta.url);
