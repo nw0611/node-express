@@ -6,12 +6,12 @@ import { fileURLToPath } from 'url';
 import path from 'path';
 import cookieParser from 'cookie-parser';
 import logger from 'morgan';
-
+// page
 import indexRouter from './routes/index.js';
 import usersRouter from './routes/users.js';
 
 const app = express();
-// const PROJECT_PORT = 3000;
+// const PROJECT_PORT = 3010;
 
 // ESモジュールで __dirname をエミュレートし、ファイルの絶対パスを変数化
 const __filename = fileURLToPath(import.meta.url);
@@ -55,43 +55,43 @@ app.use((err, req, res, next) => {
 });
 
 // 仮data
-const photoList = [
-  {
-    id: "001",
-    name: "photo001.jpg",
-    type: "jpg",
-    dataUrl: "https://picsum.photos/300/200"
-  },{
-    id: "002",
-    name: "photo002.jpg",
-    type: "jpg",
-    dataUrl: "https://picsum.photos/300/200"
-  }
-]
+// const server = app.listen(PROJECT_PORT, () => {
+//   console.log(`サーバーがポート${server.address().port}で起動しました。`);
+// });
+
+// const photoList = [
+//   {
+//     id: "001",
+//     name: "photo001.jpg",
+//     type: "jpg",
+//     dataUrl: "https://picsum.photos/300/200"
+//   },{
+//     id: "002",
+//     name: "photo002.jpg",
+//     type: "jpg",
+//     dataUrl: "https://picsum.photos/300/200"
+//   }
+// ]
 
 /*
 * API
 */
 // 写真リストを取得するAPI
-app.get("/api/photo/list", (req, res, next) => {
-  res.json(photoList);
-});
+// app.get("/api/photo/list", (req, res, next) => {
+//   res.json(photoList);
+// });
 
 // 特定のIDの写真情報を表示
-app.get("/api/photo/:photoId", (req, res, next) => {
-  console.log('req', req)
-  var photo;
-  for (var i = 0; i < photoList.length; i++){
-      console.log('index', i)
-      if (photoList[i].id == req.params.photoId){
-          var photo = photoList[i];
-      }
-  }
-  res.json(photo);
-});
-
-app.listen(PROJECT_PORT, () => {
-  console.log(`サーバーがポート${PROJECT_PORT}で起動しました。`);
-});
+// app.get("/api/photo/:photoId", (req, res, next) => {
+//   console.log('req', req)
+//   var photo;
+//   for (var i = 0; i < photoList.length; i++){
+//       console.log('index', i)
+//       if (photoList[i].id == req.params.photoId){
+//           var photo = photoList[i];
+//       }
+//   }
+//   res.json(photo);
+// });
 
 export default app;
